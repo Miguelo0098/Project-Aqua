@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # project_aqua
 
 A new Flutter project.
@@ -15,9 +14,3 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
-=======
-# Project-Aqua
-A Flutter App to locate public water fountains
-
->>>>>>> 39ac7516f45aa2773bc29af52e0bf780c48dfc47
-# Project-Aqua
