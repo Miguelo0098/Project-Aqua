@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './pages/home.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -12,37 +14,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: HomePage(),
+      routes: <String, WidgetBuilder>{
+        
+      },
     );
   }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState(){
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Project Aqua"),
-        backgroundColor: Colors.blue,
-      ),
-
-      body: Text("Here it goes!"),
-      drawer: Drawer(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        backgroundColor: Colors.blue,
-        child: Icon(Icons.add_location),
-      ),
-    );
-  }
-
 }
