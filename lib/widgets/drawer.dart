@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../pages/home.dart';
+
 Drawer buildDrawer(BuildContext context, String currentRoute){
   return Drawer(
     child: ListView(
@@ -11,6 +13,10 @@ Drawer buildDrawer(BuildContext context, String currentRoute){
         ),
         ListTile(
           title: const Text("Street Map"),
+          selected: currentRoute == HomePage.route,
+          onTap: () {
+            Navigator.pushReplacementNamed(context, HomePage.route);
+          },
         ),
         ListTile(
           title: const Text("Locations"),
