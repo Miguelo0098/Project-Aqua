@@ -7,7 +7,7 @@ import '../widgets/drawer.dart';
 
 class HomePage extends StatelessWidget {
   static const String route = '/';
-  
+
   @override
   Widget build(BuildContext context){
     return Scaffold(

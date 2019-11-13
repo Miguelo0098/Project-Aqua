@@ -11,6 +11,7 @@ class AddLocationForm extends StatefulWidget {
 
 class _AddLocationFormState extends State<AddLocationForm> {
   final myController = TextEditingController();
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   @override 
   void dispose(){
@@ -25,9 +26,34 @@ class _AddLocationFormState extends State<AddLocationForm> {
       drawer: buildDrawer(context, AddLocationForm.route),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: TextField(
-          controller: myController,
-        ),
+        child: Form(
+          key: this._formKey,
+          child: ListView(
+            children: <Widget>[
+              TextFormField(
+                keyboardType: TextInputType.numberWithOptions(),
+                decoration: InputDecoration(
+                  hintText: '41.2345123',
+                  labelText: 'Latitude'
+                )
+              ),
+              TextFormField(
+                keyboardType: TextInputType.numberWithOptions(),
+                decoration: InputDecoration(
+                  hintText: '2.2345123',
+                  labelText: 'Longitude'
+                )
+              ),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: 'Fountain near home',
+                  labelText: 'Name'
+                )
+              ),
+            ],
+          ),
+        )
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
