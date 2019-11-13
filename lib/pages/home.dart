@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                     urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     subdomains: ['a', 'b', 'c'],
                     
-                    tileProvider: NetworkTileProvider(),
+                    tileProvider: CachedNetworkTileProvider(),
                   ),
                 ],
               ),
