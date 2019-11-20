@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -12,9 +14,7 @@ class DatabaseHelper {
 
   String locationTable = 'location_table';
   String listTable = 'list_table';
-  String locationListTable = 'location_list_table';
   
-  String colId = 'id';
   String colTitle = 'title';
   String colLat = 'latitude';
   String colLong = 'longitude';
@@ -38,5 +38,30 @@ class DatabaseHelper {
     return _database;
   }
 
-  
+  Future<Database> initializeDatabase() async {
+    Directory directory = await getApplicationDocumentsDirectory();
+    String path = directory.path + 'aqua.db';
+
+    var aquaDatabase = await openDatabase(
+      path,
+      version: 1,
+      onCreate: _createDb,
+    );
+
+    return aquaDatabase;
+  }
+
+  void _createDb(Database db, int newVersion) async {
+    String sql = 'CREATE TABLE $locationTable($colIdLocation INTEGER PRIMARY KEY, $colIdList INTEGER, $colTitle TEXT, $colLat NUMBER, $colLong NUMBER, $colDescription TEXT, FOREIGN KEY ($colIdList) REFERENCES $listTable($colIdList))';
+    await db.execute(sql);
+    sql = 'CREATE TABLE $listTable($colIdList INTEGER PRIMARY KEY, $colTitle TEXT, $colDescription TEXT)';
+    await db.execute(sql);
+  }
+
+  Future<List<Map<String, dynamic>>> getLocationList(int idList) async {
+    Database db = await this.database;
+    String idListString = idList.toString();
+
+    var result = await db.query(locationTable, where: '$colIdList=$idListString', orderBy: '$colTitle ASC');
+  }
 }
