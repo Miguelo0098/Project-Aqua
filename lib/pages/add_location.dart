@@ -31,6 +31,7 @@ class _AddLocationFormState extends State<AddLocationForm> {
           child: ListView(
             children: <Widget>[
               TextFormField(
+                
                 keyboardType: TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
                   hintText: '41.2345123',
