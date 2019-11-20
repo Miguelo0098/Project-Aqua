@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:project_aqua/pages/add_location.dart';
-
+import 'package:user_location/user_location.dart';
 import '../widgets/drawer.dart';
 
 class HomePage extends StatelessWidget {
   static const String route = '/';
+
 
   @override
   Widget build(BuildContext context){
@@ -24,8 +25,11 @@ class HomePage extends StatelessWidget {
             Flexible(
               child: FlutterMap(
                 options: MapOptions(
-                  center: LatLng(51.5, -0.9),
+                  center: LatLng(0, 0),
                   zoom: 5.0,
+                  plugins: [
+                    UserLocationPlugin(),
+                  ],
                 ),
                 layers: [
                   TileLayerOptions(
@@ -33,6 +37,10 @@ class HomePage extends StatelessWidget {
                     subdomains: ['a', 'b', 'c'],
                     
                     tileProvider: CachedNetworkTileProvider(),
+                  ),
+                  UserLocationOptions(
+                    context: context,
+
                   ),
                 ],
               ),
