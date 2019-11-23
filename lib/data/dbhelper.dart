@@ -58,10 +58,108 @@ class DatabaseHelper {
     await db.execute(sql);
   }
 
-  Future<List<Map<String, dynamic>>> getLocationList(int idList) async {
-    Database db = await this.database;
-    String idListString = idList.toString();
+  // LOCATION FUNCTIONS
 
-    var result = await db.query(locationTable, where: '$colIdList=$idListString', orderBy: '$colTitle ASC');
+  Future<List<Map<String, dynamic>>> getLocationMapList(int idList) async {
+    Database db = await this.database;
+
+    var result = await db.query(locationTable, where: '$colIdList = ?', whereArgs: [idList], orderBy: '$colTitle ASC');
+    return result;
   }
+
+  Future<int> insertLocation(LocationClass location, int idList) async{
+    Database db = await this.database;
+    location.idList = idList;
+    var result = await db.insert(locationTable, location.toMap());
+    return result;
+  }
+
+  Future<int> updateLocation(LocationClass location) async{
+    var db = await this.database;
+    var result = await db.update(
+      locationTable, 
+      location.toMap(), 
+      where: '$colIdLocation = ?',
+      whereArgs: [location.id]
+    );
+    return result;
+  }
+
+  Future<int> deleteLocation(int id) async{
+    var db = await this.database;
+    int result = await db.rawDelete('DELETE FROM $locationTable WHERE $colIdLocation = $id');
+    return result;
+  }
+
+  Future<int> getLocationCount(int idList) async{
+    Database db = await this.database;
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $locationTable WHERE $colIdList = $idList');
+    int result = Sqflite.firstIntValue(x);
+    return result;
+  }
+
+  Future<List<LocationClass>> getLocationList(int idList) async{
+    var locationMapList = await getLocationMapList(idList);
+    int count = locationMapList.length;
+
+    List<LocationClass> locationList = List<LocationClass>();
+    for (int i = 0; i < count; i++) {
+      locationList.add(LocationClass.fromMapObject(locationMapList[i]));
+    }
+
+    return locationList;
+  }
+
+  // LIST FUNCTIONS
+
+  Future<List<Map<String, dynamic>>> getListMapList() async{
+    Database db = await this.database;
+    
+    var result = await db.query(listTable, orderBy: '$colTitle ASC');
+    return result;
+  }
+
+  Future<int> insertList(ListClass list) async{
+    Database db = await this.database;
+
+    var result = await db.insert(listTable, list.toMap());
+    return result;
+  }
+
+  Future<int> updateList(ListClass list) async{
+    var db = await this.database;
+    var result = await db.update(
+      listTable, 
+      list.toMap(), 
+      where: '$colIdList = ?',
+      whereArgs: [list.id]
+    );
+    return result;
+  }
+
+  Future<int> deleteList(int id) async{
+    var db = await this.database;
+    int result = await db.rawDelete('DELETE FROM $listTable WHERE $colIdList = $id');
+    return result;
+  }
+
+  Future<int> getCountList() async{
+    Database db = await this.database;
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $listTable');
+    int result = Sqflite.firstIntValue(x);
+    return result;
+  }
+
+  Future<List<ListClass>> getListList() async{
+    var ideaMapList = await getListMapList();
+    int count = ideaMapList.length;
+
+    List<ListClass> listList = List<ListClass>();
+    for (int i = 0; i < count; i++) {
+      listList.add(ListClass.fromMapObject(ideaMapList[i]));
+    }
+
+    return listList;
+  }
+
 }
