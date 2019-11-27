@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
               child: FlutterMap(
                 options: MapOptions(
                   center: LatLng(0, 0),
-                  zoom: 5.0,
+                  zoom: 15.0,
                   plugins: [
                     UserLocationPlugin(),
                   ],
