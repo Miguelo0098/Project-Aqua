@@ -5,8 +5,14 @@ import 'package:project_aqua/pages/add_location.dart';
 import 'package:user_location/user_location.dart';
 import '../widgets/drawer.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const String route = '/';
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  
   // ADD THIS
   MapController mapController = MapController();
   // ADD THIS
@@ -16,7 +22,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(title: Text("Street Map"),),
-      drawer: buildDrawer(context, route),
+      drawer: buildDrawer(context, HomePage.route),
       body: Padding(
         padding: EdgeInsets.all(8.0),
         child: Column(
