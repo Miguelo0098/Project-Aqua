@@ -7,7 +7,10 @@ import '../widgets/drawer.dart';
 
 class HomePage extends StatelessWidget {
   static const String route = '/';
-
+  // ADD THIS
+  MapController mapController = MapController();
+  // ADD THIS
+  List<Marker> markers = [];
 
   @override
   Widget build(BuildContext context){
@@ -36,11 +39,14 @@ class HomePage extends StatelessWidget {
                     urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     subdomains: ['a', 'b', 'c'],
                   ),
+                  MarkerLayerOptions(markers: markers),
                   UserLocationOptions(
                     context: context,
-
+                    mapController: mapController,
+                    markers: markers,
                   ),
                 ],
+                  mapController: mapController
               ),
             ),
           ],
