@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class LocationClass{
   int _id;
   int _idList;
