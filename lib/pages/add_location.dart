@@ -22,8 +22,6 @@ class _AddLocationFormState extends State<AddLocationForm> {
 
   String appBarTitle;
   LocationClass location;
-  List<ListClass> listList;
-  int listCount = 0;
 
   final myController = TextEditingController();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
@@ -38,10 +36,6 @@ class _AddLocationFormState extends State<AddLocationForm> {
 
   @override 
   Widget build(BuildContext context){
-    if (listList == null) {
-      listList = List<ListClass>();
-      updateListList();
-    }
 
     return Scaffold(
       appBar: AppBar(title: Text(appBarTitle)),
@@ -58,9 +52,6 @@ class _AddLocationFormState extends State<AddLocationForm> {
                   hintText: 'Fountain near home',
                   labelText: 'Name'
                 )
-              ),
-              FormField(
-
               ),
               TextFormField(
                 keyboardType: TextInputType.numberWithOptions(),
@@ -98,16 +89,5 @@ class _AddLocationFormState extends State<AddLocationForm> {
     );
   }
 
-  void updateListList(){
-    final Future<Database> dbFuture = helper.initializeDatabase();
-    dbFuture.then((database){
-      Future<List<ListClass>> listListFuture = helper.getListList();
-      listListFuture.then((listList){
-        setState((){
-          this.listList = listList;
-          this.listCount = listList.length;
-        });
-      });
-    });
-  }
+  
 }
