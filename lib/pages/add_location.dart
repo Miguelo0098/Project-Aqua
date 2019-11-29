@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:project_aqua/data/dbhelper.dart';
+import 'package:project_aqua/data/list_class.dart';
+import 'package:project_aqua/data/location_class.dart';
 import 'package:project_aqua/widgets/drawer.dart';
+import 'package:sqflite/sqflite.dart';
 
 class AddLocationForm extends StatefulWidget {
   static const String route = '/add_location';
+
+  final String appBarTitle;
+  final LocationClass location;
+
+  AddLocationForm(this.appBarTitle, this.location);
+
   @override
-  _AddLocationFormState createState() => _AddLocationFormState();
+  _AddLocationFormState createState() => _AddLocationFormState(this.appBarTitle, this.location);
 }
 
 class _AddLocationFormState extends State<AddLocationForm> {
+  DatabaseHelper helper = DatabaseHelper();
+
+  String appBarTitle;
+  LocationClass location;
+  List<ListClass> listList;
+  int listCount = 0;
+
   final myController = TextEditingController();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
+  _AddLocationFormState(this.appBarTitle, this.location);
 
   @override 
   void dispose(){
@@ -19,8 +38,13 @@ class _AddLocationFormState extends State<AddLocationForm> {
 
   @override 
   Widget build(BuildContext context){
+    if (listList == null) {
+      listList = List<ListClass>();
+      updateListList();
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text("Add a Location")),
+      appBar: AppBar(title: Text(appBarTitle)),
       drawer: buildDrawer(context, AddLocationForm.route),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,7 +53,16 @@ class _AddLocationFormState extends State<AddLocationForm> {
           child: ListView(
             children: <Widget>[
               TextFormField(
-                
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: 'Fountain near home',
+                  labelText: 'Name'
+                )
+              ),
+              FormField(
+
+              ),
+              TextFormField(
                 keyboardType: TextInputType.numberWithOptions(),
                 decoration: InputDecoration(
                   hintText: '41.2345123',
@@ -43,13 +76,7 @@ class _AddLocationFormState extends State<AddLocationForm> {
                   labelText: 'Longitude'
                 )
               ),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  hintText: 'Fountain near home',
-                  labelText: 'Name'
-                )
-              ),
+              
             ],
           ),
         )
@@ -69,5 +96,18 @@ class _AddLocationFormState extends State<AddLocationForm> {
         child: Icon(Icons.text_fields),
       ),
     );
+  }
+
+  void updateListList(){
+    final Future<Database> dbFuture = helper.initializeDatabase();
+    dbFuture.then((database){
+      Future<List<ListClass>> listListFuture = helper.getListList();
+      listListFuture.then((listList){
+        setState((){
+          this.listList = listList;
+          this.listCount = listList.length;
+        });
+      });
+    });
   }
 }
