@@ -6,9 +6,9 @@ class LocationClass{
   double _longitude;
   String _description;
 
-  LocationClass(this._title, this._latitude, this._longitude, [this._description]);
+  LocationClass(this._title, this._idList, this._latitude, this._longitude, [this._description]);
 
-  LocationClass.withId(this._id, this._title, this._latitude, this._longitude, [this._description]);
+  LocationClass.withId(this._id, this._title, this._idList, this._latitude, this._longitude, [this._description]);
 
   int get id => _id;
 

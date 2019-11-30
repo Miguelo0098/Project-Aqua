@@ -1,38 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:project_aqua/data/dbhelper.dart';
-import 'package:project_aqua/data/list_class.dart';
 import 'package:project_aqua/data/location_class.dart';
 import 'package:project_aqua/widgets/drawer.dart';
-import 'package:sqflite/sqflite.dart';
 
 class AddLocationForm extends StatefulWidget {
   static const String route = '/add_location';
 
   final String appBarTitle;
-  final LocationClass location;
+  final LocationClass locationClass;
 
-  AddLocationForm(this.appBarTitle, this.location);
+  AddLocationForm(this.appBarTitle, this.locationClass);
 
   @override
-  _AddLocationFormState createState() => _AddLocationFormState(this.appBarTitle, this.location);
+  _AddLocationFormState createState() => _AddLocationFormState(this.appBarTitle, this.locationClass);
 }
 
 class _AddLocationFormState extends State<AddLocationForm> {
   DatabaseHelper helper = DatabaseHelper();
 
   String appBarTitle;
-  LocationClass location;
+  LocationClass locationClass;
 
-  final myController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+
+  TextEditingController descriptionController = TextEditingController();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
-  _AddLocationFormState(this.appBarTitle, this.location);
-
-  @override 
-  void dispose(){
-    myController.dispose();
-    super.dispose();
-  }
+  _AddLocationFormState(this.appBarTitle, this.locationClass);
 
   @override 
   Widget build(BuildContext context){
@@ -47,47 +41,66 @@ class _AddLocationFormState extends State<AddLocationForm> {
           child: ListView(
             children: <Widget>[
               TextFormField(
+                controller: titleController,
                 keyboardType: TextInputType.text,
+                onChanged: (value){
+                  updateTitle();
+                },
                 decoration: InputDecoration(
                   hintText: 'Fountain near home',
                   labelText: 'Name'
                 )
               ),
-              TextFormField(
-                keyboardType: TextInputType.numberWithOptions(),
-                decoration: InputDecoration(
-                  hintText: '41.2345123',
-                  labelText: 'Latitude'
-                )
+              Padding(
+                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RaisedButton(
+                        color: Theme.of(context).primaryColorDark,
+                        textColor: Colors.white,
+                        child: Text(
+                          'Set Location',
+                          textScaleFactor: 1.5,
+                        ),
+                        onPressed: (){
+                          setState(() {
+                            setLocation(locationClass);
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
               TextFormField(
-                keyboardType: TextInputType.numberWithOptions(),
+                controller: descriptionController,
+                keyboardType: TextInputType.text,
+                onChanged: (value){
+                  updateDescription();
+                },
                 decoration: InputDecoration(
-                  hintText: '2.2345123',
-                  labelText: 'Longitude'
-                )
-              ),
-              
+                  hintText: 'A fountain near my home. 10/10',
+                  labelText: 'Description'
+                ),
+              )
             ],
           ),
         )
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          return showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text(myController.text),
-              );
-            }
-          );
-        },
-        tooltip: 'Show me the value!',
-        child: Icon(Icons.text_fields),
-      ),
     );
   }
 
-  
+  void setLocation(LocationClass locationClass){
+
+  }
+
+  void updateTitle(){
+
+  }
+
+  void updateDescription(){
+    
+  }
+
 }
