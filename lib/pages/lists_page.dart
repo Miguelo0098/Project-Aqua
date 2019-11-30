@@ -46,7 +46,7 @@ class _ListsPageState extends State<ListsPage> {
               subtitle: Text(this.listList[position].description),
               onTap: (){
                 debugPrint('List Selected');
-                navigateToLocationForm(this.listList[position].id);
+                navigateToListForm(this.listList[position], 'Edit List');
               }
             ),
           );
@@ -75,16 +75,7 @@ class _ListsPageState extends State<ListsPage> {
       });
     });
   }
-
-  void navigateToLocationForm(int idList) async {
-    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context){
-      return AddLocationForm('Add a Location', LocationClass('', idList, 0.0, 0.0));
-    }));
-    if (result == true) {
-      updateListView();
-    }
-  }
-
+  
   void navigateToListForm(ListClass list, String title)async{
     bool result = await Navigator.push(context, MaterialPageRoute(builder: (context){
       return ListDetails(list, title);
