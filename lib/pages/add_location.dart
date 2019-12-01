@@ -104,11 +104,11 @@ class _AddLocationFormState extends State<AddLocationForm> {
   }
 
   void updateTitle(){
-
+    locationClass.title = titleController.text;
   }
 
   void updateDescription(){
-    
+    locationClass.description = descriptionController.text;
   }
 
 }
