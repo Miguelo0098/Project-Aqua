@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:project_aqua/data/dbhelper.dart';
 import 'package:project_aqua/data/list_class.dart';
-import 'package:project_aqua/data/location_class.dart';
-import 'package:project_aqua/pages/add_location.dart';
+import 'package:project_aqua/widgets/drawer.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'list_details.dart';
 
 class ListsPage extends StatefulWidget {
+    static const String route = '/lists';
+
   @override 
   _ListsPageState createState() => _ListsPageState();
 }
 
 class _ListsPageState extends State<ListsPage> {
-  static const String route = '/selectList';
+
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<ListClass> listList;
   int countList = 0;
@@ -27,31 +28,8 @@ class _ListsPageState extends State<ListsPage> {
 
     return Scaffold(
       appBar: AppBar(title: Text('Select a List'),),
-      body: ListView.builder(
-        itemCount: countList,
-        itemBuilder: (BuildContext context, int position){
-          return Card(
-            color: Colors.white,
-            elevation: 2.0,
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.cyan,
-                child: Icon(Icons.list),
-              ),
-              title: Text(
-                this.listList[position].title,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-
-              subtitle: Text(this.listList[position].description),
-              onTap: (){
-                debugPrint('List Selected');
-                navigateToListForm(this.listList[position], 'Edit List');
-              }
-            ),
-          );
-        },
-      ),
+      drawer: buildDrawer(context, ListsPage.route),
+      body: getListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           navigateToListForm(ListClass('', ''), 'Add List');
@@ -60,6 +38,34 @@ class _ListsPageState extends State<ListsPage> {
         child: Icon(Icons.add),
       ),
 
+    );
+  }
+
+  ListView getListView(){
+    return ListView.builder(
+      itemCount: countList,
+      itemBuilder: (BuildContext context, int position){
+        return Card(
+          color: Colors.white,
+          elevation: 2.0,
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.cyan,
+              child: Icon(Icons.list),
+            ),
+            title: Text(
+              this.listList[position].title,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            subtitle: Text(this.listList[position].description),
+            onTap: (){
+              debugPrint('List Selected');
+              navigateToListForm(this.listList[position], 'Edit List');
+            }
+          ),
+        );
+      },
     );
   }
 

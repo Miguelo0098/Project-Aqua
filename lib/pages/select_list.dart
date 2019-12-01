@@ -27,31 +27,7 @@ class _SelectListPageState extends State<SelectListPage> {
 
     return Scaffold(
       appBar: AppBar(title: Text('Select a List'),),
-      body: ListView.builder(
-        itemCount: countList,
-        itemBuilder: (BuildContext context, int position){
-          return Card(
-            color: Colors.white,
-            elevation: 2.0,
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.cyan,
-                child: Icon(Icons.list),
-              ),
-              title: Text(
-                this.listList[position].title,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-
-              subtitle: Text(this.listList[position].description),
-              onTap: (){
-                debugPrint('List Selected');
-                navigateToLocationForm(this.listList[position].id);
-              }
-            ),
-          );
-        },
-      ),
+      body: getListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           navigateToListForm(ListClass('', ''), 'Add List');
@@ -74,6 +50,34 @@ class _SelectListPageState extends State<SelectListPage> {
         });
       });
     });
+  }
+
+  ListView getListView(){
+    return ListView.builder(
+      itemCount: countList,
+      itemBuilder: (BuildContext context, int position){
+        return Card(
+          color: Colors.white,
+          elevation: 2.0,
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.cyan,
+              child: Icon(Icons.list),
+            ),
+            title: Text(
+              this.listList[position].title,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            subtitle: Text(this.listList[position].description),
+            onTap: (){
+              debugPrint('List Selected');
+              navigateToLocationForm(this.listList[position].id);
+            }
+          ),
+        );
+      },
+    );
   }
 
   void navigateToLocationForm(int idList) async {

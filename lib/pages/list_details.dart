@@ -50,11 +50,6 @@ class _ListDetailsState extends State<ListDetails>{
                 padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                 child: TextFormField(
                   controller: titleController,
-                  validator: (value){
-                    if (value.isEmpty) {
-                      return 'A title is obligatory';
-                    }
-                  },
                   onChanged: (value){
                     updateTitle();
                   },
