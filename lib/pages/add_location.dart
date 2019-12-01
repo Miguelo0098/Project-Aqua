@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:project_aqua/data/dbhelper.dart';
 import 'package:project_aqua/data/location_class.dart';
+import 'package:project_aqua/pages/select_location.dart';
 import 'package:project_aqua/widgets/drawer.dart';
+import 'package:latlong/latlong.dart';
 
 class AddLocationForm extends StatefulWidget {
   static const String route = '/add_location';
@@ -65,7 +67,7 @@ class _AddLocationFormState extends State<AddLocationForm> {
                         ),
                         onPressed: (){
                           setState(() {
-                            setLocation(locationClass);
+                            setLocation();
                           });
                         },
                       ),
@@ -91,8 +93,14 @@ class _AddLocationFormState extends State<AddLocationForm> {
     );
   }
 
-  void setLocation(LocationClass locationClass){
-
+  void setLocation() async {
+    LatLng location = await Navigator.push(context, MaterialPageRoute(builder: (context){
+      return SelectLocationPage();
+    }));
+    if (location != null) {
+      locationClass.latitude = location.latitude;
+      locationClass.longitude = location.longitude;
+    }
   }
 
   void updateTitle(){
