@@ -19,6 +19,7 @@ class _ListDetailsState extends State<ListDetails>{
   ListClass listClass;
 
   TextEditingController titleController = TextEditingController();
+  bool isActive = false;
   TextEditingController descriptionController = TextEditingController();
 
   _ListDetailsState(this.listClass, this.appBarTitle);
@@ -73,13 +74,25 @@ class _ListDetailsState extends State<ListDetails>{
                 ),
               ),
               Padding(
+                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: Row(
+                  children: <Widget>[
+                    Checkbox(
+                      value: isActive,
+                      onChanged: _updateIsActive,
+                    ),
+                    Text("Mark this list as active"),
+                  ],
+                )
+              ),
+              Padding(
                 padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
                 child: Row(
                   children: <Widget>[
                     Expanded(
                       child: RaisedButton(
                         color: Theme.of(context).primaryColorDark,
-                        textColor: Theme.of(context).primaryColorLight,
+                        textColor: Colors.white,
                         child: Text(
                           'Save',
                           textScaleFactor: 1.5,
@@ -96,8 +109,8 @@ class _ListDetailsState extends State<ListDetails>{
 
                     Expanded(
                       child: RaisedButton(
-                        color: Theme.of(context).primaryColorDark,
-                        textColor: Theme.of(context).primaryColorLight,
+                        color: Colors.red,
+                        textColor: Colors.white,
                         child: Text(
                           'Delete',
                           textScaleFactor: 1.5,
@@ -127,13 +140,31 @@ class _ListDetailsState extends State<ListDetails>{
     listClass.title = titleController.text;
   }
 
+  int translateBool(bool boolean){
+    if (boolean) {
+      return 1;
+    }
+    return 0;
+  }
+
+  void _updateIsActive(bool isActive){
+    int active = translateBool(isActive);
+    listClass.active = active;
+  }
+
   void updateDescription(){
     listClass.description = descriptionController.text;
   }
 
+
   void _save() async{
     moveToLastScreen();
-
+    
+    ListClass activeList = await databaseHelper.getActiveList();
+    if (activeList != null && listClass.active == 1) {
+      activeList.active = 0;
+      await databaseHelper.updateList(activeList);
+    }
     int result;
     if (listClass.id != null) {
       result = await databaseHelper.updateList(listClass);

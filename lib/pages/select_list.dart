@@ -30,7 +30,7 @@ class _SelectListPageState extends State<SelectListPage> {
       body: getListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          navigateToListForm(ListClass('', ''), 'Add List');
+          navigateToListForm(ListClass('', 0, ''), 'Add List');
         },
         tooltip: 'Add a List',
         child: Icon(Icons.add),

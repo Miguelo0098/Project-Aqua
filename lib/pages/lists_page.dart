@@ -32,7 +32,7 @@ class _ListsPageState extends State<ListsPage> {
       body: getListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          navigateToListForm(ListClass('', ''), 'Add List');
+          navigateToListForm(ListClass('', 0, ''), 'Add List');
         },
         tooltip: 'Add a List',
         child: Icon(Icons.add),

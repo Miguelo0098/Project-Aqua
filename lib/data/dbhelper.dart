@@ -18,6 +18,7 @@ class DatabaseHelper {
   String colTitle = 'title';
   String colLat = 'latitude';
   String colLong = 'longitude';
+  String colActive = 'active';
   String colDescription = 'description';
   String colIdLocation = 'id_location';
   String colIdList = 'id_list';
@@ -44,7 +45,7 @@ class DatabaseHelper {
 
     var aquaDatabase = await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDb,
     );
 
@@ -54,7 +55,7 @@ class DatabaseHelper {
   void _createDb(Database db, int newVersion) async {
     String sql = 'CREATE TABLE $locationTable($colIdLocation INTEGER PRIMARY KEY, $colIdList INTEGER, $colTitle TEXT, $colLat NUMBER, $colLong NUMBER, $colDescription TEXT, FOREIGN KEY ($colIdList) REFERENCES $listTable($colIdList))';
     await db.execute(sql);
-    sql = 'CREATE TABLE $listTable($colIdList INTEGER PRIMARY KEY, $colTitle TEXT, $colDescription TEXT)';
+    sql = 'CREATE TABLE $listTable($colIdList INTEGER PRIMARY KEY, $colTitle TEXT, $colActive INTEGER, $colDescription TEXT)';
     await db.execute(sql);
   }
 
@@ -160,6 +161,17 @@ class DatabaseHelper {
     }
 
     return listList;
+  }
+
+  Future<ListClass> getActiveList() async{
+    List<ListClass> listList = await getListList();
+    for (var list in listList) {
+      if (list.active == 1) {
+        return list;
+      }
+    }
+
+    return null;
   }
 
 }
