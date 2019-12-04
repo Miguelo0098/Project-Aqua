@@ -100,6 +100,8 @@ class _AddLocationFormState extends State<AddLocationForm> {
     if (location != null) {
       locationClass.latitude = location.latitude;
       locationClass.longitude = location.longitude;
+      String message = 'Coordinates set to Lat: '+ locationClass.latitude.toString() + ' Long: ' + locationClass.longitude.toString();
+      _showAlertDialog('Status', message);
     }
   }
 
@@ -109,6 +111,17 @@ class _AddLocationFormState extends State<AddLocationForm> {
 
   void updateDescription(){
     locationClass.description = descriptionController.text;
+  }
+
+  void _showAlertDialog(String title, String message){
+    AlertDialog alertDialog = AlertDialog(
+      title: Text(title),
+      content: Text(message),
+    );
+    showDialog(
+      context: context,
+      builder: (_) => alertDialog
+    );
   }
 
 }
