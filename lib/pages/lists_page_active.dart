@@ -9,7 +9,7 @@ import 'package:project_aqua/pages/add_location.dart';
 //import 'list_details.dart';
 
 class ListsLocation extends StatefulWidget {
-    static const String route = '/lists';
+    static const String route = '/locations';
 
   @override 
   _ListsLocationState createState() => _ListsLocationState();
