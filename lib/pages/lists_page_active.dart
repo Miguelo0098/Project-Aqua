@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_aqua/data/dbhelper.dart';
+import 'package:project_aqua/data/list_class.dart';
 //import 'package:project_aqua/data/list_class.dart';
 import 'package:project_aqua/widgets/drawer.dart';
 import 'package:sqflite/sqflite.dart';
@@ -18,24 +19,39 @@ class ListsLocation extends StatefulWidget {
 class _ListsLocationState extends State<ListsLocation> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-  int idlist;
+  ListClass activeList;
   List<LocationClass> listLocation;
   int countList = 0;
 
   @override 
   Widget build(BuildContext ctx) {
+    setActiveList();
+    if (activeList == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text('Active Location List'),),
+        drawer: buildDrawer(context, ListsLocation.route),
+        body: Text(
+          "No active location list available. Maybe you should mark one as active.",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        )
+      );
+    }
+    
     if (listLocation == null) {
       listLocation = List<LocationClass>();
-      updateListView(idlist);
+      updateListView(activeList.id);
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Select a List'),),
+      appBar: AppBar(title: Text('Active Location List'),),
       drawer: buildDrawer(context, ListsLocation.route),
       body: getListView(),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          navigateToListForm(LocationClass('', 0, 0, 0), 'Add List', idlist);
+          navigateToLocationForm(LocationClass('', 0, 0, 0), 'Add List', activeList.id);
         },
         tooltip: 'Add a List',
         child: Icon(Icons.add),
@@ -64,12 +80,24 @@ class _ListsLocationState extends State<ListsLocation> {
             subtitle: Text(this.listLocation[position].description),
             onTap: (){
               debugPrint('List Selected');
-              navigateToListForm(this.listLocation[position], 'Edit Location', idlist);
+              navigateToLocationForm(this.listLocation[position], 'Edit Location', activeList.id);
             }
           ),
         );
       },
     );
+  }
+
+  void setActiveList(){
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database){
+      Future<ListClass> activeListFuture = databaseHelper.getActiveList();
+      activeListFuture.then((activeList){
+        setState((){
+          this.activeList = activeList;
+        });
+      });
+    });
   }
 
   void updateListView(int idlist){
@@ -85,7 +113,7 @@ class _ListsLocationState extends State<ListsLocation> {
     });
   }
   
-  void navigateToListForm(LocationClass location, String title, int idlist)async{
+  void navigateToLocationForm(LocationClass location, String title, int idlist)async{
     bool result = await Navigator.push(context, MaterialPageRoute(builder: (context){
       return AddLocationForm(title, location);
     }));

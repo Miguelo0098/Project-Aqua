@@ -78,8 +78,14 @@ class _ListDetailsState extends State<ListDetails>{
                 child: Row(
                   children: <Widget>[
                     Checkbox(
-                      value: isActive,
-                      onChanged: _updateIsActive,
+                      value: this.isActive,
+                      activeColor: Colors.blue,
+                      onChanged: (bool newValue){
+                        setState(() {
+                          this.isActive = newValue;
+                          _updateIsActive(isActive);
+                        });
+                      },
                     ),
                     Text("Mark this list as active"),
                   ],

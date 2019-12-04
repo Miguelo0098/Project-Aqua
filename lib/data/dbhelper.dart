@@ -170,7 +170,6 @@ class DatabaseHelper {
         return list;
       }
     }
-
     return null;
   }
 

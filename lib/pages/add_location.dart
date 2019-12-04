@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_aqua/data/dbhelper.dart';
 import 'package:project_aqua/data/location_class.dart';
+import 'package:project_aqua/pages/home.dart';
 import 'package:project_aqua/pages/select_location.dart';
 import 'package:project_aqua/widgets/drawer.dart';
 import 'package:latlong/latlong.dart';
@@ -85,6 +86,46 @@ class _AddLocationFormState extends State<AddLocationForm> {
                   hintText: 'A fountain near my home. 10/10',
                   labelText: 'Description'
                 ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RaisedButton(
+                        color: Theme.of(context).primaryColorDark,
+                        textColor: Colors.white,
+                        child: Text(
+                          'Save',
+                          textScaleFactor: 1.5,
+                        ),
+                        onPressed: (){
+                          setState(() {
+                            _save();
+                          });
+                        },
+                      ),
+                    ),
+
+                    Container(width: 5.0,),
+
+                    Expanded(
+                      child: RaisedButton(
+                        color: Colors.red,
+                        textColor: Colors.white,
+                        child: Text(
+                          'Delete',
+                          textScaleFactor: 1.5,
+                        ),
+                        onPressed: (){
+                          setState(() {
+                            _delete();
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                ),
               )
             ],
           ),
@@ -122,6 +163,39 @@ class _AddLocationFormState extends State<AddLocationForm> {
       context: context,
       builder: (_) => alertDialog
     );
+  }
+
+  void _save()async{
+    goHome();
+    int result;
+    if (locationClass.id != null) {
+      result = await helper.updateLocation(locationClass);
+      
+    } else{
+      result = await helper.insertLocation(locationClass, locationClass.idList);
+    }
+
+    if (result == 0) {
+      _showAlertDialog('Status', 'Error Saving Location');
+    }
+  }
+
+  void _delete() async{
+    goHome();
+    if (locationClass.id == null) {
+      _showAlertDialog('Status', 'No Idea was deleted');
+      return;
+    }
+      
+    
+    int result = await helper.deleteLocation(locationClass.id);
+    if (result == 0) {
+      _showAlertDialog('Status', 'Error Ocurred while Deleting Idea');
+    }
+  }
+
+  void goHome(){
+    Navigator.pushReplacementNamed(context, HomePage.route);
   }
 
 }
