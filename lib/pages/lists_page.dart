@@ -60,7 +60,7 @@ class _ListsPageState extends State<ListsPage> {
 
             subtitle: Text(this.listList[position].description),
             onTap: (){
-              debugPrint('List Selected');
+              debugPrint('ID: '+ listList[position].id.toString() +' and Active: '+ listList[position].active.toString() +'Selected');
               navigateToListForm(this.listList[position], 'Edit List');
             }
           ),

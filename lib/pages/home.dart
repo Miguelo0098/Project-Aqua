@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:project_aqua/data/dbhelper.dart';
+import 'package:project_aqua/data/list_class.dart';
+import 'package:project_aqua/data/location_class.dart';
 import 'package:project_aqua/pages/select_list.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:user_location/user_location.dart';
 import '../widgets/drawer.dart';
 
@@ -12,14 +16,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
-  // ADD THIS
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
+
   MapController mapController = MapController();
-  // ADD THIS
   List<Marker> markers = [];
+
+  List<LocationClass> locations;
+  int countList = 0;
+  ListClass activeList;
 
   @override
   Widget build(BuildContext context){
+    setActiveList();
+    if (activeList != null) {
+      if(locations == null){
+        locations = List<LocationClass>();
+        updateListView(activeList.id);
+        updateMarkers();
+      }
+      
+    }
     return Scaffold(
       appBar: AppBar(title: Text("Street Map"),),
       drawer: buildDrawer(context, HomePage.route),
@@ -69,5 +86,60 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.add_location),
       ),
     );
+  }
+
+  void setActiveList(){
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database){
+      Future<ListClass> activeListFuture = databaseHelper.getActiveList();
+      activeListFuture.then((activeList){
+        setState((){
+          this.activeList = activeList;
+        });
+      });
+    });
+  }
+
+  void updateListView(int idlist){
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database){
+      Future<List<LocationClass>> listLocationFuture = databaseHelper.getLocationList(idlist);
+      listLocationFuture.then((listLocation){
+        setState((){
+          this.locations = listLocation;
+          this.countList = listLocation.length;
+        });
+      });
+    });
+  }
+
+  void updateMarkers(){
+    Marker auxMarker;
+    for (var location in this.locations) {
+      auxMarker = Marker(
+        width: 24.0,
+        height: 24.0,
+        point: LatLng(location.latitude, location.longitude),
+        builder: (context) => Container(
+          child: GestureDetector(
+            onTap: (){
+              AlertDialog alertDialog = AlertDialog(
+                title: Text(location.title),
+                content: Text(location.description),
+              );
+              showDialog(
+                context: context,
+                builder: (_) => alertDialog,
+              );
+            },
+            child: Icon(
+              Icons.location_on,
+              color: Colors.blue,
+            )
+          ),
+        )
+      );
+      markers.add(auxMarker);
+    }
   }
 }

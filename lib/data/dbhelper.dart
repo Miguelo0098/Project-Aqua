@@ -20,7 +20,7 @@ class DatabaseHelper {
   String colLong = 'longitude';
   String colActive = 'active';
   String colDescription = 'description';
-  String colIdLocation = 'id_location';
+  String colId = 'id';
   String colIdList = 'id_list';
 
   DatabaseHelper._createInstance();
@@ -45,7 +45,7 @@ class DatabaseHelper {
 
     var aquaDatabase = await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _createDb,
     );
 
@@ -53,9 +53,9 @@ class DatabaseHelper {
   }
 
   void _createDb(Database db, int newVersion) async {
-    String sql = 'CREATE TABLE $locationTable($colIdLocation INTEGER PRIMARY KEY, $colIdList INTEGER, $colTitle TEXT, $colLat NUMBER, $colLong NUMBER, $colDescription TEXT, FOREIGN KEY ($colIdList) REFERENCES $listTable($colIdList))';
+    String sql = 'CREATE TABLE $locationTable($colId INTEGER PRIMARY KEY, $colIdList INTEGER, $colTitle TEXT, $colLat NUMBER, $colLong NUMBER, $colDescription TEXT, FOREIGN KEY ($colIdList) REFERENCES $listTable($colId))';
     await db.execute(sql);
-    sql = 'CREATE TABLE $listTable($colIdList INTEGER PRIMARY KEY, $colTitle TEXT, $colActive INTEGER, $colDescription TEXT)';
+    sql = 'CREATE TABLE $listTable($colId INTEGER PRIMARY KEY, $colTitle TEXT, $colActive INTEGER, $colDescription TEXT)';
     await db.execute(sql);
   }
 
@@ -80,7 +80,7 @@ class DatabaseHelper {
     var result = await db.update(
       locationTable, 
       location.toMap(), 
-      where: '$colIdLocation = ?',
+      where: '$colId = ?',
       whereArgs: [location.id]
     );
     return result;
@@ -88,7 +88,7 @@ class DatabaseHelper {
 
   Future<int> deleteLocation(int id) async{
     var db = await this.database;
-    int result = await db.rawDelete('DELETE FROM $locationTable WHERE $colIdLocation = $id');
+    int result = await db.rawDelete('DELETE FROM $locationTable WHERE $colId = $id');
     return result;
   }
 
@@ -132,7 +132,7 @@ class DatabaseHelper {
     var result = await db.update(
       listTable, 
       list.toMap(), 
-      where: '$colIdList = ?',
+      where: '$colId = ?',
       whereArgs: [list.id]
     );
     return result;
@@ -140,7 +140,7 @@ class DatabaseHelper {
 
   Future<int> deleteList(int id) async{
     var db = await this.database;
-    int result = await db.rawDelete('DELETE FROM $listTable WHERE $colIdList = $id');
+    int result = await db.rawDelete('DELETE FROM $listTable WHERE $colId = $id');
     return result;
   }
 
@@ -165,11 +165,14 @@ class DatabaseHelper {
 
   Future<ListClass> getActiveList() async{
     List<ListClass> listList = await getListList();
-    for (var list in listList) {
-      if (list.active == 1) {
-        return list;
+    if (listList.length != 0 || listList != null) {
+      for (var list in listList) {
+        if (list.active == 1) {
+          return list;
+        }
       }
     }
+    
     return null;
   }
 

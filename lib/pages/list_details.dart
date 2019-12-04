@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_aqua/data/dbhelper.dart';
 import 'package:project_aqua/data/list_class.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ListDetails extends StatefulWidget {
   final String appBarTitle;
@@ -15,11 +16,12 @@ class ListDetails extends StatefulWidget {
 class _ListDetailsState extends State<ListDetails>{
   DatabaseHelper databaseHelper = DatabaseHelper();
 
+
   String appBarTitle;
   ListClass listClass;
+  ListClass activeList;
 
   TextEditingController titleController = TextEditingController();
-  bool isActive = false;
   TextEditingController descriptionController = TextEditingController();
 
   _ListDetailsState(this.listClass, this.appBarTitle);
@@ -28,6 +30,7 @@ class _ListDetailsState extends State<ListDetails>{
   Widget build(BuildContext context){
     titleController.text = listClass.title;
     descriptionController.text = listClass.description;
+    setActiveList();
 
     return WillPopScope(
       onWillPop: (){
@@ -78,12 +81,11 @@ class _ListDetailsState extends State<ListDetails>{
                 child: Row(
                   children: <Widget>[
                     Checkbox(
-                      value: this.isActive,
+                      value: translateInt(this.listClass.active),
                       activeColor: Colors.blue,
                       onChanged: (bool newValue){
                         setState(() {
-                          this.isActive = newValue;
-                          _updateIsActive(isActive);
+                          _updateIsActive(newValue);
                         });
                       },
                     ),
@@ -153,9 +155,16 @@ class _ListDetailsState extends State<ListDetails>{
     return 0;
   }
 
+  bool translateInt(int integer){
+    if (integer == 1) {
+      return true;
+    }
+    return false;
+  }
+
   void _updateIsActive(bool isActive){
     int active = translateBool(isActive);
-    listClass.active = active;
+    this.listClass.active = active;
   }
 
   void updateDescription(){
@@ -164,13 +173,16 @@ class _ListDetailsState extends State<ListDetails>{
 
 
   void _save() async{
+
+    if (this.activeList != null && listClass.active == 1) {
+      this.activeList.active = 0;
+      
+      await databaseHelper.updateList(this.activeList);
+      debugPrint('Previous active list gone!');
+    }
+
     moveToLastScreen();
     
-    ListClass activeList = await databaseHelper.getActiveList();
-    if (activeList != null && listClass.active == 1) {
-      activeList.active = 0;
-      await databaseHelper.updateList(activeList);
-    }
     int result;
     if (listClass.id != null) {
       result = await databaseHelper.updateList(listClass);
@@ -180,7 +192,7 @@ class _ListDetailsState extends State<ListDetails>{
     }
 
     if (result == 0) {
-      _showAlertDialog('Status', 'Error Saving Idea');
+      _showAlertDialog('Status', 'Error Saving List');
     }
   }
 
@@ -188,14 +200,14 @@ class _ListDetailsState extends State<ListDetails>{
     moveToLastScreen();
 
     if (listClass.id == null) {
-      _showAlertDialog('Status', 'No Idea was deleted');
+      _showAlertDialog('Status', 'No List was deleted');
       return;
     }
       
     
     int result = await databaseHelper.deleteList(listClass.id);
     if (result == 0) {
-      _showAlertDialog('Status', 'Error Ocurred while Deleting Idea');
+      _showAlertDialog('Status', 'Error Ocurred while Deleting List');
     }
   }
 
@@ -208,5 +220,17 @@ class _ListDetailsState extends State<ListDetails>{
       context: context,
       builder: (_) => alertDialog
     );
+  }
+
+  void setActiveList(){
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database){
+      Future<ListClass> activeListFuture = databaseHelper.getActiveList();
+      activeListFuture.then((activeList){
+        setState((){
+          this.activeList = activeList;
+        });
+      });
+    });
   }
 }

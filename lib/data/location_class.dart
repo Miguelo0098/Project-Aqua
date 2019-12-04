@@ -66,7 +66,7 @@ class LocationClass{
   }
 
   LocationClass.fromMapObject(Map<String, dynamic> map){
-    this._id = map['id_location'];
+    this._id = map['id'];
     this._idList = map['id_list'];
     this._title = map['title'];
     this._latitude = map['latitude'];
