@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_aqua/pages/lists_page.dart';
 import 'package:project_aqua/pages/lists_page_active.dart';
 
 import '../pages/home.dart';
@@ -27,13 +26,6 @@ Drawer buildDrawer(BuildContext context, String currentRoute){
             Navigator.pushReplacementNamed(context, ListsLocation.route);
           },
         ),
-        ListTile(
-          title: const Text("My Lists"),
-          selected: currentRoute == ListsPage.route,
-          onTap: () {
-            Navigator.pushReplacementNamed(context, ListsPage.route);
-          },
-        )
       ],
     ),
   );

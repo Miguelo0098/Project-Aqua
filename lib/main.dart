@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_aqua/pages/lists_page.dart';
 import 'package:project_aqua/pages/lists_page_active.dart';
 
 import './pages/home.dart';
@@ -17,7 +16,6 @@ class MyApp extends StatelessWidget {
       ),
       home: HomePage(),
       routes: <String, WidgetBuilder>{
-        ListsPage.route: (context) => ListsPage(),
         ListsLocation.route: (context) => ListsLocation(),
       },
     );

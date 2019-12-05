@@ -25,14 +25,17 @@ class _AddLocationFormState extends State<AddLocationForm> {
   LocationClass locationClass;
 
   TextEditingController titleController = TextEditingController();
-
   TextEditingController descriptionController = TextEditingController();
+  
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   _AddLocationFormState(this.appBarTitle, this.locationClass);
 
   @override 
   Widget build(BuildContext context){
+
+    titleController.text = locationClass.title;
+    descriptionController.text = locationClass.description; 
 
     return Scaffold(
       appBar: AppBar(title: Text(appBarTitle)),
@@ -172,11 +175,17 @@ class _AddLocationFormState extends State<AddLocationForm> {
       result = await helper.updateLocation(locationClass);
       
     } else{
-      result = await helper.insertLocation(locationClass, locationClass.idList);
+      result = await helper.insertLocation(locationClass);
     }
 
     if (result == 0) {
       _showAlertDialog('Status', 'Error Saving Location');
+    }else{
+      String message = 'Location Saved successfully\nLatitude: ' 
+        + locationClass.latitude.toString()
+        + '\nLongitude: '
+        + locationClass.longitude.toString();
+      _showAlertDialog('Status', message);
     }
   }
 
@@ -195,7 +204,7 @@ class _AddLocationFormState extends State<AddLocationForm> {
   }
 
   void goHome(){
-    Navigator.pushReplacementNamed(context, HomePage.route);
+    Navigator.pop(context, true);
   }
 
 }

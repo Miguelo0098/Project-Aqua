@@ -1,18 +1,15 @@
 class LocationClass{
   int _id;
-  int _idList;
   String _title;
   double _latitude;
   double _longitude;
   String _description;
 
-  LocationClass(this._title, this._idList, this._latitude, this._longitude, [this._description]);
+  LocationClass(this._title, this._latitude, this._longitude, [this._description]);
 
-  LocationClass.withId(this._id, this._title, this._idList, this._latitude, this._longitude, [this._description]);
+  LocationClass.withId(this._id, this._title, this._latitude, this._longitude, [this._description]);
 
   int get id => _id;
-
-  int get idList => _idList;
 
   String get title => _title;
 
@@ -21,11 +18,6 @@ class LocationClass{
   double get longitude => _longitude;
   
   String get description => _description;
-
-  set idList(int newList){
-
-    this._idList = newList;
-  }
 
   set title(String newTitle){
     if (newTitle.length <= 255) {
@@ -56,7 +48,6 @@ class LocationClass{
     if (id != null) {
       map['id_location'] = _id;
     }
-    map['id_list'] = _idList;
     map['title'] = _title;
     map['latitude'] = _latitude;
     map['longitude'] = _longitude;
@@ -67,7 +58,6 @@ class LocationClass{
 
   LocationClass.fromMapObject(Map<String, dynamic> map){
     this._id = map['id'];
-    this._idList = map['id_list'];
     this._title = map['title'];
     this._latitude = map['latitude'];
     this._longitude = map['longitude'];

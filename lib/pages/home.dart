@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:project_aqua/data/dbhelper.dart';
-import 'package:project_aqua/data/list_class.dart';
 import 'package:project_aqua/data/location_class.dart';
-import 'package:project_aqua/pages/select_list.dart';
+import 'package:project_aqua/pages/add_location.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:user_location/user_location.dart';
 import '../widgets/drawer.dart';
@@ -21,22 +20,20 @@ class _HomePageState extends State<HomePage> {
 
   MapController mapController = MapController();
   List<Marker> markers = [];
+  List<Marker> locationMarkers = [];
 
   List<LocationClass> locations;
   int countList = 0;
-  ListClass activeList;
 
   @override
   Widget build(BuildContext context){
-    setActiveList();
-    if (activeList != null) {
-      if(locations == null){
-        locations = List<LocationClass>();
-        updateListView(activeList.id);
-        updateMarkers();
-      }
-      
+    
+    if (locations == null) {
+      locations = List<LocationClass>();
+      updateListView();
     }
+
+    
     return Scaffold(
       appBar: AppBar(title: Text("Street Map"),),
       drawer: buildDrawer(context, HomePage.route),
@@ -63,11 +60,15 @@ class _HomePageState extends State<HomePage> {
                     subdomains: ['a', 'b', 'c'],
                   ),
                   MarkerLayerOptions(markers: markers),
+                  MarkerLayerOptions(markers: locationMarkers),
+                  
                   UserLocationOptions(
                     context: context,
                     mapController: mapController,
                     markers: markers,
                   ),
+
+                  
                 ],
                   mapController: mapController
               ),
@@ -77,10 +78,8 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SelectListPage())
-          );
+          
+          navigateToAddForm('Add Location', new LocationClass('', 0, 0, ''));
         },
         backgroundColor: Colors.blue,
         child: Icon(Icons.add_location),
@@ -88,35 +87,35 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void setActiveList(){
-    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
-    dbFuture.then((database){
-      Future<ListClass> activeListFuture = databaseHelper.getActiveList();
-      activeListFuture.then((activeList){
-        setState((){
-          this.activeList = activeList;
-        });
-      });
-    });
+
+  void navigateToAddForm(String title, LocationClass location)async{
+    bool result = await Navigator.push(
+      context, 
+      MaterialPageRoute(builder: (context) => AddLocationForm(title, location)
+    ));
+
+    if (result == true) {
+      updateListView();
+    }
   }
 
-  void updateListView(int idlist){
+  void updateListView(){
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database){
-      Future<List<LocationClass>> listLocationFuture = databaseHelper.getLocationList(idlist);
+      Future<List<LocationClass>> listLocationFuture = databaseHelper.getLocationList();
       listLocationFuture.then((listLocation){
         setState((){
           this.locations = listLocation;
           this.countList = listLocation.length;
+          this.locationMarkers = getMarkers();
         });
       });
     });
   }
 
-  void updateMarkers(){
-    Marker auxMarker;
-    for (var location in this.locations) {
-      auxMarker = Marker(
+  List<Marker> getMarkers(){
+    List<Marker> markers = this.locations.map((location){
+      return Marker(
         width: 24.0,
         height: 24.0,
         point: LatLng(location.latitude, location.longitude),
@@ -139,7 +138,9 @@ class _HomePageState extends State<HomePage> {
           ),
         )
       );
-      markers.add(auxMarker);
-    }
+    }).toList();
+
+    return markers;
   }
+
 }

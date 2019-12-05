@@ -4,7 +4,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'location_class.dart';
-import 'list_class.dart';
 
 import 'dart:async';
 
@@ -13,15 +12,13 @@ class DatabaseHelper {
   static Database _database;
 
   String locationTable = 'location_table';
-  String listTable = 'list_table';
   
   String colTitle = 'title';
   String colLat = 'latitude';
   String colLong = 'longitude';
-  String colActive = 'active';
   String colDescription = 'description';
   String colId = 'id';
-  String colIdList = 'id_list';
+
 
   DatabaseHelper._createInstance();
 
@@ -45,7 +42,7 @@ class DatabaseHelper {
 
     var aquaDatabase = await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: _createDb,
     );
 
@@ -53,24 +50,22 @@ class DatabaseHelper {
   }
 
   void _createDb(Database db, int newVersion) async {
-    String sql = 'CREATE TABLE $locationTable($colId INTEGER PRIMARY KEY, $colIdList INTEGER, $colTitle TEXT, $colLat NUMBER, $colLong NUMBER, $colDescription TEXT, FOREIGN KEY ($colIdList) REFERENCES $listTable($colId))';
-    await db.execute(sql);
-    sql = 'CREATE TABLE $listTable($colId INTEGER PRIMARY KEY, $colTitle TEXT, $colActive INTEGER, $colDescription TEXT)';
+    String sql = 'CREATE TABLE $locationTable($colId INTEGER PRIMARY KEY, $colTitle TEXT, $colLat NUMBER, $colLong NUMBER, $colDescription TEXT)';
     await db.execute(sql);
   }
 
   // LOCATION FUNCTIONS
 
-  Future<List<Map<String, dynamic>>> getLocationMapList(int idList) async {
+  Future<List<Map<String, dynamic>>> getLocationMapList() async {
     Database db = await this.database;
 
-    var result = await db.query(locationTable, where: '$colIdList = ?', whereArgs: [idList], orderBy: '$colTitle ASC');
+    var result = await db.query(locationTable, orderBy: '$colTitle ASC');
     return result;
   }
 
-  Future<int> insertLocation(LocationClass location, int idList) async{
+  Future<int> insertLocation(LocationClass location) async{
     Database db = await this.database;
-    location.idList = idList;
+
     var result = await db.insert(locationTable, location.toMap());
     return result;
   }
@@ -92,15 +87,15 @@ class DatabaseHelper {
     return result;
   }
 
-  Future<int> getLocationCount(int idList) async{
+  Future<int> getLocationCount() async{
     Database db = await this.database;
-    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $locationTable WHERE $colIdList = $idList');
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $locationTable');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
 
-  Future<List<LocationClass>> getLocationList(int idList) async{
-    var locationMapList = await getLocationMapList(idList);
+  Future<List<LocationClass>> getLocationList() async{
+    var locationMapList = await getLocationMapList();
     int count = locationMapList.length;
 
     List<LocationClass> locationList = List<LocationClass>();
@@ -109,71 +104,6 @@ class DatabaseHelper {
     }
 
     return locationList;
-  }
-
-  // LIST FUNCTIONS
-
-  Future<List<Map<String, dynamic>>> getListMapList() async{
-    Database db = await this.database;
-    
-    var result = await db.query(listTable, orderBy: '$colTitle ASC');
-    return result;
-  }
-
-  Future<int> insertList(ListClass list) async{
-    Database db = await this.database;
-
-    var result = await db.insert(listTable, list.toMap());
-    return result;
-  }
-
-  Future<int> updateList(ListClass list) async{
-    var db = await this.database;
-    var result = await db.update(
-      listTable, 
-      list.toMap(), 
-      where: '$colId = ?',
-      whereArgs: [list.id]
-    );
-    return result;
-  }
-
-  Future<int> deleteList(int id) async{
-    var db = await this.database;
-    int result = await db.rawDelete('DELETE FROM $listTable WHERE $colId = $id');
-    return result;
-  }
-
-  Future<int> getCountList() async{
-    Database db = await this.database;
-    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $listTable');
-    int result = Sqflite.firstIntValue(x);
-    return result;
-  }
-
-  Future<List<ListClass>> getListList() async{
-    var ideaMapList = await getListMapList();
-    int count = ideaMapList.length;
-
-    List<ListClass> listList = List<ListClass>();
-    for (int i = 0; i < count; i++) {
-      listList.add(ListClass.fromMapObject(ideaMapList[i]));
-    }
-
-    return listList;
-  }
-
-  Future<ListClass> getActiveList() async{
-    List<ListClass> listList = await getListList();
-    if (listList.length != 0 || listList != null) {
-      for (var list in listList) {
-        if (list.active == 1) {
-          return list;
-        }
-      }
-    }
-    
-    return null;
   }
 
 }

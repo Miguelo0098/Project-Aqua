@@ -17,6 +17,8 @@ class SelectLocationPageState extends State<SelectLocationPage> {
   MapController mapController = MapController();
   // ADD THIS
   List<Marker> markers = [];
+  List<Marker> locationMarkers = [];
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -45,11 +47,13 @@ class SelectLocationPageState extends State<SelectLocationPage> {
                         subdomains: ['a', 'b', 'c'],
                       ),
                       MarkerLayerOptions(markers: markers),
+                      MarkerLayerOptions(markers: locationMarkers),
                       UserLocationOptions(
                         context: context,
                         mapController: mapController,
                         markers: markers,
                       ),
+                      
                     ],
                     mapController: mapController
                 ),
