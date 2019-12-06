@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_aqua/data/dbhelper.dart';
 import 'package:project_aqua/data/location_class.dart';
-import 'package:project_aqua/pages/home.dart';
 import 'package:project_aqua/pages/select_location.dart';
 import 'package:project_aqua/widgets/drawer.dart';
 import 'package:latlong/latlong.dart';
