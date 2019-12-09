@@ -30,8 +30,8 @@ class _HomePageState extends State<HomePage> {
     
     if (locations == null) {
       locations = List<LocationClass>();
-      updateListView();
     }
+    updateListView();
 
     
     return Scaffold(

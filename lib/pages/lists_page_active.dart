@@ -4,7 +4,7 @@ import 'package:project_aqua/widgets/drawer.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:project_aqua/data/location_class.dart';
 import 'package:project_aqua/pages/add_location.dart';
-
+import 'package:qr_flutter/qr_flutter.dart';
 //import 'list_details.dart';
 
 class ListsLocation extends StatefulWidget {
@@ -52,8 +52,8 @@ class _ListsLocationState extends State<ListsLocation> {
           elevation: 2.0,
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Colors.cyan,
-              child: Icon(Icons.list),
+              backgroundColor: Colors.blue,
+              child: Icon(Icons.location_on, color: Colors.white),
             ),
             title: Text(
               this.listLocation[position].title,
@@ -61,6 +61,17 @@ class _ListsLocationState extends State<ListsLocation> {
             ),
 
             subtitle: Text(this.listLocation[position].description),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(Icons.share, color: Colors.black),
+                  onTap: (){
+                    _showQRCode(context, listLocation[position]);
+                  },
+                )
+              ],
+            ),
             onTap: (){
               debugPrint('List Selected');
               navigateToLocationForm(this.listLocation[position], 'Edit Location');
@@ -93,5 +104,21 @@ class _ListsLocationState extends State<ListsLocation> {
     if (result == true) {
       updateListView();
     }
+  }
+
+  void _showQRCode(BuildContext context, LocationClass location){
+    
+    AlertDialog alertDialog = AlertDialog(
+        title: Text(location.title),
+        content: QrImage(
+          data: location.toJson(),
+          version: QrVersions.auto,
+          size: 200.0,
+        )
+      );
+      showDialog(
+        context: context,
+        builder: (_) => alertDialog,
+      );
   }
 }

@@ -28,6 +28,9 @@ dependencies:
   sqflite: any
   path_provider: any
   latlong: ^0.6.1
+  qr_flutter: 
+    git:
+      url: git://github.com/lukef/qr.flutter.git
 
 dev_dependencies:
   flutter_test:
