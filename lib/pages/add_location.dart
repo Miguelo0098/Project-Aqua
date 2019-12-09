@@ -172,6 +172,7 @@ class _AddLocationFormState extends State<AddLocationForm> {
     int result;
     if (locationClass.id != null) {
       result = await helper.updateLocation(locationClass);
+      debugPrint('Actualizado!');
       
     } else{
       result = await helper.insertLocation(locationClass);

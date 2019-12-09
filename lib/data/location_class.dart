@@ -48,7 +48,7 @@ class LocationClass{
   Map<String, dynamic> toMap(){
     var map = Map<String, dynamic>();
     if (id != null) {
-      map['id_location'] = _id;
+      map['id'] = _id;
     }
     map['title'] = _title;
     map['latitude'] = _latitude;

@@ -42,7 +42,7 @@ class DatabaseHelper {
 
     var aquaDatabase = await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: _createDb,
     );
 
