@@ -2,7 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:project_aqua/data/location_class.dart';
+import 'package:project_aqua/pages/home.dart';
+import 'package:project_aqua/widgets/drawer.dart';
 import 'package:qrcode_reader/qrcode_reader.dart';
+
+import 'add_location.dart';
 
 
 class ScanLocation extends StatefulWidget {
@@ -27,8 +31,20 @@ class _ScanLocationState extends State<ScanLocation> {
       appBar: AppBar(
         title: Text('Scan Location'),
       ),
+      drawer: buildDrawer(context, ScanLocation.route),
       body: new Center(
-          child: Text(codebar),
+          child: Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              'Tap the Floating Action Button to scan a QRCode', 
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 16.0,
+
+              ),
+            ),
+          )
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
@@ -56,6 +72,7 @@ class _ScanLocationState extends State<ScanLocation> {
 
   void _setLocation(){
     String message;
+    bool isOk = false;
     try {
       setState(() {
         this.location = LocationClass.fromJson(this.codebar);
@@ -68,18 +85,45 @@ class _ScanLocationState extends State<ScanLocation> {
                 this.location.longitude.toString() +
                 "\nDescription: " +
                 this.location.description;
+      isOk = true;
     } catch (e) {
       message = "Error: can't parse string to location ($e)";
     }
 
-    _showAlertDialog("Status", message);
+    _showAlertDialog("Status", message, isOk);
   }
 
-  void _showAlertDialog(String title, String message){
-    AlertDialog alertDialog = AlertDialog(
-      title: Text(title),
-      content: Text(message),
-    );
+  void _showAlertDialog(String title, String message, bool isOk){
+
+    AlertDialog alertDialog;
+    
+    if (isOk) {
+      alertDialog = AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: <Widget>[
+          RaisedButton(
+            child: Text("Save Location", style: TextStyle(color: Colors.white),),
+            onPressed: ()async{
+              bool result = await Navigator.push(context, MaterialPageRoute(builder: (context){
+                return AddLocationForm('Add Location', this.location);
+              }));
+              if (result == true) {
+                Navigator.pushReplacementNamed(context, HomePage.route);
+              }
+
+            },
+          )
+        ],
+      );
+    } else {
+      alertDialog = AlertDialog(
+        title: Text(title),
+        content: Text(message),
+      );
+    }
+
+    
     showDialog(
       context: context,
       builder: (_) => alertDialog
