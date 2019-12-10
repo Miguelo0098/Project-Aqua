@@ -11,8 +11,8 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="project_aqua"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Project AQUA"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -32,6 +32,5 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.apptreesoftware.barcodescan.BarcodeScannerActivity" />
     </application>
 </manifest>
