@@ -68,6 +68,14 @@ class LocationClass{
 
   LocationClass.fromJson(String jsonString){
     Map<String, dynamic> map = jsonDecode(jsonString);
+    this._title = map['title'];
+    this._latitude = map['latitude'];
+    this._longitude = map['longitude'];
+    this._description = map['description'];
+  }
+
+  LocationClass.fromJsonWithId(String jsonString){
+    Map<String, dynamic> map = jsonDecode(jsonString);
     this._id = map['id'];
     this._title = map['title'];
     this._latitude = map['latitude'];
