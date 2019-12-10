@@ -29,7 +29,12 @@ class SelectLocationPageState extends State<SelectLocationPage> {
             children: [
               Padding(
                 padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: Text('Tap on the map to add a location'),
+                child: Text(
+                  'Tap on the map to select a location',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
               ),
               Flexible(
                 child: FlutterMap(

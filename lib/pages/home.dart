@@ -41,10 +41,7 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-              child: Text('This is a map (obviously)'),
-            ),
+            
             Flexible(
               child: FlutterMap(
                 options: MapOptions(
