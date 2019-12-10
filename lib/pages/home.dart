@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
                   TileLayerOptions(
                     urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     subdomains: ['a', 'b', 'c'],
+                    tileProvider: NetworkTileProvider()
                   ),
                   MarkerLayerOptions(markers: markers),
                   MarkerLayerOptions(markers: locationMarkers),
@@ -67,7 +68,7 @@ class _HomePageState extends State<HomePage> {
 
                   
                 ],
-                  mapController: mapController
+                mapController: mapController
               ),
             ),
           ],

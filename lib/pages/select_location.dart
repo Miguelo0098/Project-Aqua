@@ -50,6 +50,7 @@ class SelectLocationPageState extends State<SelectLocationPage> {
                       TileLayerOptions(
                         urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                         subdomains: ['a', 'b', 'c'],
+                        tileProvider: NetworkTileProvider()
                       ),
                       MarkerLayerOptions(markers: markers),
                       MarkerLayerOptions(markers: locationMarkers),
