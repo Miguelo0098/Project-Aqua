@@ -18,7 +18,7 @@ Estas son características básicas de la aplicación:
 
 Clonar el repositorio o descargarlo como un archivo .zip.
 
-```
+```bash
 $ git clone git@github.com:Miguelo0098/Project-Aqua.git
 ```
 
