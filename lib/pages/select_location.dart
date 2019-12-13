@@ -22,7 +22,7 @@ class SelectLocationPageState extends State<SelectLocationPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(title: Text("Street Map"),),
+      appBar: AppBar(title: Text("Select Location"),),
       body: Padding(
           padding: EdgeInsets.all(8.0),
           child: Column(
@@ -66,13 +66,6 @@ class SelectLocationPageState extends State<SelectLocationPage> {
               ),
             ],
           )
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          //moveToLastScreen();
-        },
-        backgroundColor: Colors.blue,
-        child: Icon(Icons.add_location),
       ),
     );
   }

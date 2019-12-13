@@ -129,9 +129,8 @@ class _HomePageState extends State<HomePage> {
                 builder: (_) => alertDialog,
               );
             },
-            child: Icon(
-              Icons.location_on,
-              color: Colors.blue,
+            child: Image(
+              image: AssetImage("lib/assets/localizacion.png"),
             )
           ),
         )
