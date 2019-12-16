@@ -45,8 +45,8 @@ class _HomePageState extends State<HomePage> {
             Flexible(
               child: FlutterMap(
                 options: MapOptions(
-                  center: LatLng(0, 0),
-                  zoom: 15.0,
+                  center: LatLng(37.8550964, -4.7086738),
+                  zoom: 14.0,
                   plugins: [
                     UserLocationPlugin(),
                   ],
@@ -116,8 +116,8 @@ class _HomePageState extends State<HomePage> {
   List<Marker> getMarkers(){
     List<Marker> markers = this.locations.map((location){
       return Marker(
-        width: 36.0,
-        height: 36.0,
+        width: 32.0,
+        height: 32.0,
         point: LatLng(location.latitude, location.longitude),
         builder: (context) => Container(
           child: GestureDetector(

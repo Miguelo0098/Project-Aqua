@@ -39,8 +39,8 @@ class SelectLocationPageState extends State<SelectLocationPage> {
               Flexible(
                 child: FlutterMap(
                     options: MapOptions(
-                      center: LatLng(0, 0),
-                      zoom: 15.0,
+                      center: LatLng(37.8550964, -4.7086738),
+                      zoom: 14.0,
                       onTap: moveToLastScreen,
                       plugins: [
                         UserLocationPlugin(),

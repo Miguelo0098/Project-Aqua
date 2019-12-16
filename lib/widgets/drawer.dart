@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_aqua/pages/about.dart';
 import 'package:project_aqua/pages/lists_page_active.dart';
 import 'package:project_aqua/pages/scan_location.dart';
 
@@ -29,11 +30,18 @@ Drawer buildDrawer(BuildContext context, String currentRoute){
         ),
         ListTile(
           title: const Text("Scan Location"),
-          selected: currentRoute == ListsLocation.route,
+          selected: currentRoute == ScanLocation.route,
           onTap: (){
             Navigator.pushReplacementNamed(context, ScanLocation.route);
           },
         ),
+        ListTile(
+          title: const Text("About"),
+          selected: currentRoute == AboutPage.route,
+          onTap: (){
+            Navigator.pushNamed(context, AboutPage.route);
+          },
+        )
       ],
     ),
   );
