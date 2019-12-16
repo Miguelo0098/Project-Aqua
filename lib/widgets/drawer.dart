@@ -10,7 +10,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute){
       children: <Widget>[
         const DrawerHeader(
           child: Center(
-            child: Image(image: AssetImage('lib/assets/header.jpg'),)
+            child: Image(image: AssetImage('lib/assets/header-drawer.jpg'),)
           ),
         ),
         ListTile(

@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                   TileLayerOptions(
                     urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     subdomains: ['a', 'b', 'c'],
-                    tileProvider: NetworkTileProvider()
+                    tileProvider: CachedNetworkTileProvider()
                   ),
                   MarkerLayerOptions(markers: markers),
                   MarkerLayerOptions(markers: locationMarkers),
@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
                     context: context,
                     mapController: mapController,
                     markers: markers,
+                    showMoveToCurrentLocationFloatingActionButton: false,
                   ),
 
                   
@@ -74,13 +75,14 @@ class _HomePageState extends State<HomePage> {
           ],
         )
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
           
           navigateToAddForm('Add Location', new LocationClass('', 0, 0, ''));
         },
         backgroundColor: Colors.blue,
-        child: Icon(Icons.add_location),
+        icon: Icon(Icons.add_location),
+        label: Text("Add Location"),
       ),
     );
   }
@@ -114,8 +116,8 @@ class _HomePageState extends State<HomePage> {
   List<Marker> getMarkers(){
     List<Marker> markers = this.locations.map((location){
       return Marker(
-        width: 24.0,
-        height: 24.0,
+        width: 36.0,
+        height: 36.0,
         point: LatLng(location.latitude, location.longitude),
         builder: (context) => Container(
           child: GestureDetector(

@@ -62,10 +62,10 @@ class _AddLocationFormState extends State<AddLocationForm> {
                   children: <Widget>[
                     Expanded(
                       child: RaisedButton(
-                        color: Theme.of(context).primaryColorDark,
+                        color: Colors.cyan,
                         textColor: Colors.white,
                         child: Text(
-                          'Set Location',
+                          'Set Coordinates',
                           textScaleFactor: 1.5,
                         ),
                         onPressed: (){
@@ -85,7 +85,7 @@ class _AddLocationFormState extends State<AddLocationForm> {
                   updateDescription();
                 },
                 decoration: InputDecoration(
-                  hintText: 'A fountain near my home. 10/10',
+                  hintText: 'A fountain near my home. Water is OK',
                   labelText: 'Description'
                 ),
               ),
@@ -98,8 +98,8 @@ class _AddLocationFormState extends State<AddLocationForm> {
                         color: Theme.of(context).primaryColorDark,
                         textColor: Colors.white,
                         child: Text(
-                          'Save',
-                          textScaleFactor: 1.5,
+                          'Save Location',
+                          textScaleFactor: 1.2,
                         ),
                         onPressed: (){
                           setState(() {
@@ -116,8 +116,8 @@ class _AddLocationFormState extends State<AddLocationForm> {
                         color: Colors.red,
                         textColor: Colors.white,
                         child: Text(
-                          'Delete',
-                          textScaleFactor: 1.5,
+                          'Delete Location',
+                          textScaleFactor: 1.2,
                         ),
                         onPressed: (){
                           setState(() {

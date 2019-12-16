@@ -46,7 +46,7 @@ class _ScanLocationState extends State<ScanLocation> {
             ),
           )
       ),
-      floatingActionButton: new FloatingActionButton(
+      floatingActionButton: new FloatingActionButton.extended(
         onPressed: () {
         
           Future<String> futurebarcode = new QRCodeReader()
@@ -64,7 +64,8 @@ class _ScanLocationState extends State<ScanLocation> {
             });
         },
         tooltip: 'Reader the QRCode',
-        child: new Icon(Icons.add_a_photo),
+        icon: new Icon(Icons.add_a_photo),
+        label: Text("Scan QR Code"),
       ),
     );
   }

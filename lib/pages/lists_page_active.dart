@@ -32,12 +32,13 @@ class _ListsLocationState extends State<ListsLocation> {
       appBar: AppBar(title: Text('Active Location List'),),
       drawer: buildDrawer(context, ListsLocation.route),
       body: getListView(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: (){
-          navigateToLocationForm(LocationClass('', 0, 0, ''), 'Add List');
+          navigateToLocationForm(LocationClass('', 0, 0, ''), 'Add Location');
         },
-        tooltip: 'Add a List',
-        child: Icon(Icons.add),
+        tooltip: 'Add a Location',
+        icon: Icon(Icons.add),
+        label: Text("Add Location"),
       ),
 
     );
